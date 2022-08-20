@@ -5,6 +5,7 @@ public class Main {
 
     public static String arOperation;
     public static String result;
+    public static boolean checkDiv; //Проверка значений 40 и 90 в римской системе.
 
     public static void main(String[] args) throws MathOperationException, NumberTypeException{
 
@@ -31,6 +32,15 @@ public class Main {
             el[0] = numberOne.notRomType();
             Rom numberTwo = Rom.valueOf(el[2]);
             el[2] = numberTwo.notRomType();
+
+            if(Integer.parseInt(el[0]) > 10 || Integer.parseInt(el[0]) < 0 || Integer.parseInt(el[2]) > 10 || Integer.parseInt(el[2]) < 1){
+                throw new NumberTypeException("throws Exception //т.к. вводимые числа должны быть в диапозоне от 1 до 10");
+            }
+        }
+        else{
+            if(Integer.parseInt(el[0]) > 10 || Integer.parseInt(el[0]) < 0 || Integer.parseInt(el[2]) > 10 || Integer.parseInt(el[2]) < 1){
+                throw new NumberTypeException("throws Exception //т.к. вводимые числа должны быть в диапозоне от 1 до 10");
+            }
         }
 
         int resultInt = 0;
@@ -69,6 +79,7 @@ public class Main {
         int k = 0;
         boolean space = false;
         String newInput = "";
+
         for(int i = 0; i < input.length(); i++){
             if(input.charAt(i) == '+' || input.charAt(i) == '-' || input.charAt(i) == '*' || input.charAt(i) == '/'){
                 k++;
@@ -131,11 +142,23 @@ public class Main {
 
         int c1 = input / 100;
         romNumber += C(c1, input);
-        int c2 = input % 100;
+        int c2;
+        if(checkDiv) {
+            c2 = input % 100;
+        }
+        else{
+            c2 = input % 90;
+        }
 
         int l1 = c2 / 50;
         romNumber += L(l1, c2);
-        int l2 = c2 % 50;
+        int l2;
+        if(checkDiv){
+            l2 = c2 % 50;
+        }
+        else{
+            l2 = c2 % 40;
+        }
 
         int x1 = l2 / 10;
         romNumber += X(x1);
@@ -159,12 +182,14 @@ public class Main {
 
         if(input >= 90 && input > 100){
             romNumber += "XC";
+            checkDiv = false;
         }
         else{
             while(c1 > i){
                 romNumber += "C";
                 i++;
             }
+            checkDiv = true;
         }
 
         return romNumber;
@@ -177,12 +202,14 @@ public class Main {
 
         if(c2 >= 40 && c2 < 50){
             romNumber += "XL";
+            checkDiv = false;
         }
         else{
             while(l1 > i){
                 romNumber += "L";
                 i++;
             }
+            checkDiv = true;
         }
 
         return romNumber;
